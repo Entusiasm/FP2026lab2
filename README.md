@@ -12,7 +12,7 @@ bash
 sbt run
 
 Структура проекта
-text
+
 src/main/scala/
     ├── algebra/               # 4 TF-алгебры
     │     ├── Console          — ввод/вывод
