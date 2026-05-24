@@ -11,7 +11,7 @@ chcp 65001
 bash
 sbt run
 
-Структура проекта
+## Структура проекта
 
 src/main/scala/
     ├── algebra/               # 4 TF-алгебры
