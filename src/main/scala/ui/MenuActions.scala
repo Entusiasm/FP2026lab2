@@ -18,27 +18,27 @@ object MenuActions {
 
   private def readProduct[F[_]: Monad](console: Console[F]): F[Option[Product]] =
     console.putStrLn("Товар: 1 - Мишка, 2 - Кукла, 3 - Машинка").flatMap { _ =>
-      console.getStrLn.map { input =>
-        input.toInt match {
-          case 1 => Some(TeddyBear)
-          case 2 => Some(Doll)
-          case 3 => Some(Car)
-          case _ => None
+        console.getStrLn.map { input =>
+            scala.util.Try(input.toInt).toOption match {
+                case Some(1) => Some(TeddyBear)
+                case Some(2) => Some(Doll)
+                case Some(3) => Some(Car)
+                case _ => None
+            }
         }
-      }
     }
 
-  private def readMaterial[F[_]: Monad](console: Console[F]): F[Option[Material]] =
+    private def readMaterial[F[_]: Monad](console: Console[F]): F[Option[Material]] =
     console.putStrLn("Материал: 1 - Ткань, 2 - Дерево, 3 - Пластик, 4 - Краска").flatMap { _ =>
-      console.getStrLn.map { input =>
-        input.toInt match {
-          case 1 => Some(Fabric)
-          case 2 => Some(Wood)
-          case 3 => Some(Plastic)
-          case 4 => Some(Paint)
-          case _ => None
+        console.getStrLn.map { input =>
+            scala.util.Try(input.toInt).toOption match {
+                case Some(1) => Some(Fabric)
+                case Some(2) => Some(Wood)
+                case Some(3) => Some(Plastic)
+                case Some(4) => Some(Paint)
+                case _ => None
+            }
         }
-      }
     }
 
   def receiveMaterial[F[_]: Monad: Console: StateMachine: Logging](

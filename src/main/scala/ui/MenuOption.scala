@@ -33,14 +33,14 @@ case class MenuTreeNode[F[_]](
         _ <- console.putStrLn("0 - назад")
         _ <- console.putStr("> ")
         input <- console.getStrLn
-        cmd <- M.pure(input.toInt)
+        cmd <- M.pure(scala.util.Try(input.toInt).toOption)   // безопасное преобразование
         newState <- cmd match {
-          case n if 1 <= n && n <= children.size =>
+          case Some(n) if 1 <= n && n <= children.size =>
             children(n-1).execute(s)
-          case 0 => M.pure(s)
+          case Some(0) => M.pure(s)
           case _ => console.putStrLn("Неверная команда").map(_ => s)
         }
-        cont <- M.pure(cmd != 0)
+        cont <- M.pure(cmd != Some(0))
         res <- if (cont) loop(newState) else M.pure(newState)
       } yield res
     }
