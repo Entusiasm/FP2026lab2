@@ -4,7 +4,7 @@ import algebra.ConfigAlgebra
 import cats.effect.IO
 import domain.{Config, Product, Recipe, Material}
 
-class ConfigIO(config: Config) extends ConfigAlgebra[IO]:
+class ConfigIO(config: Config) extends ConfigAlgebra[IO] {
   def recipeOf(product: Product): IO[Recipe] = IO.pure(config.recipes(product))
   def productionCost(product: Product, quantity: Int): IO[Int] = IO.pure {
     val recipe = config.recipes(product)
@@ -16,3 +16,4 @@ class ConfigIO(config: Config) extends ConfigAlgebra[IO]:
     recipe.materials.forall { case (m, need) => available.getOrElse(m, 0) >= need * quantity }
   }
   def isDefectAllowed(currentDefectRate: Double): IO[Boolean] = IO.pure(config.allowedDefectRate >= currentDefectRate)
+}

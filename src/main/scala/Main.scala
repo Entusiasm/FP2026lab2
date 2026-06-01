@@ -1,21 +1,15 @@
-import cats.effect.{IO, IOApp}
-import cats.effect.kernel.Ref
-import program.FactoryProgram
+import cats.effect.IO
+import cats.effect.unsafe.implicits.global
 import domain.{ConfigData, InitialState}
 import interpreters.{ConsoleIO, ConfigIO, LoggingIO, StateMachineIO}
-import cats.Monad
+import algebra.{Console, ConfigAlgebra, Logging, StateMachine}
+import ui.MainMenu
 
-object Main extends IOApp.Simple:
-  def run: IO[Unit] =
-    for
-      stateRef <- Ref.of[IO, domain.StateData](InitialState.data)
-      configIO = new ConfigIO(ConfigData.initial)
-      loggingIO = new LoggingIO
-      stateMachineIO = new StateMachineIO(stateRef, ConfigData.initial, loggingIO)
-      _ <- FactoryProgram.run[IO](
-        ConsoleIO,
-        configIO,
-        loggingIO,
-        stateMachineIO
-      )(using Monad[IO])
-    yield ()
+object Main extends App {
+  implicit val console: Console[IO] = ConsoleIO
+  implicit val configAlg: ConfigAlgebra[IO] = new ConfigIO(ConfigData.initial)
+  implicit val logging: Logging[IO] = new LoggingIO
+  implicit val stateMachine: StateMachine[IO] = new StateMachineIO(ConfigData.initial)
+
+  MainMenu.run[IO](InitialState.data).unsafeRunSync()
+}

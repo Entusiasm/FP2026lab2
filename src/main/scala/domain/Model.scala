@@ -28,10 +28,12 @@ case class StateData(
   shiftHours: Int
 )
 
-def combineMaps[K](a: Map[K, Int], b: Map[K, Int]): Map[K, Int] =
-  (a.keySet ++ b.keySet).map(k => k -> (a.getOrElse(k, 0) + b.getOrElse(k, 0))).toMap
+object Helpers {
+  def combineMaps[K](a: Map[K, Int], b: Map[K, Int]): Map[K, Int] =
+    (a.keySet ++ b.keySet).map(k => k -> (a.getOrElse(k, 0) + b.getOrElse(k, 0))).toMap
+}
 
-object ConfigData:
+object ConfigData {
   val initial: Config = Config(
     recipes = Map(
       TeddyBear -> Recipe(Map(Fabric -> 2, Paint -> 1)),
@@ -43,11 +45,13 @@ object ConfigData:
     allowedDefectRate = 10.0,
     actualDefectProbability = 0.05
   )
+}
 
-object InitialState:
+object InitialState {
   val data: StateData = StateData(
     materials = Map(Fabric -> 50, Wood -> 20, Plastic -> 100, Paint -> 30),
     finishedToys = Map.empty,
     defectiveToys = Map.empty,
     shiftHours = 0
   )
+}
